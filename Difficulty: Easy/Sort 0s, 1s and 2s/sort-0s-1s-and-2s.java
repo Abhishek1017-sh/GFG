@@ -31,25 +31,27 @@ class GFG {
 // } Driver Code Ends
 class Solution {
     // Function to sort an array of 0s, 1s, and 2s
-    public void sort012(int[] arr) {
+    public void sort012(int[] nums) {
         // code here
-        int Nonzero=0;
-        for(int i=0;i<arr.length;i++){
-            if(arr[i]==0){
-                int temp=arr[i];
-                arr[i]=arr[Nonzero];
-                arr[Nonzero]=temp;
-                
-                Nonzero++;
+        int low=0;
+        int mid = 0;
+        int high =  nums.length-1;
+        while(low<=high){
+            if( nums[low]==0){
+                int temp  = nums[low];
+                nums[low] = nums[mid] ;
+                nums[mid] = temp;
+                low ++;
+                mid ++;
             }
-        }
-        int TwoIdx=0;
-        for(int i=0;i<arr.length;i++){
-            if(arr[i]!=2){
-                int temp=arr[i];
-                arr[i]=arr[TwoIdx];
-                arr[TwoIdx]=temp;
-                TwoIdx++;
+            else if( nums[low] == 2){
+                int temp  = nums[low];
+                nums[low] = nums[high] ;
+                nums[high] = temp;
+                high --;
+            }
+            else if( nums[low] ==1){
+                low ++;
             }
         }
     }
