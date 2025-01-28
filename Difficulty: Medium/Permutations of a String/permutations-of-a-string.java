@@ -11,7 +11,8 @@ class GFG {
         while (t-- > 0) {
             String S = br.readLine().trim();
             Solution obj = new Solution();
-            List<String> ans = obj.findPermutation(S);
+            ArrayList<String> ans = obj.findPermutation(S);
+            Collections.sort(ans);
             for (int i = 0; i < ans.size(); i++) {
                 out.print(ans.get(i) + " ");
             }
@@ -27,28 +28,29 @@ class GFG {
 
 
 class Solution {
-    public List<String> findPermutation(String s) {
+    public ArrayList<String> findPermutation(String s) {
         // Code here
-        List<String> result = new ArrayList<>();
+        ArrayList<String> result = new ArrayList<>();
         char[] chars = s.toCharArray();
         Arrays.sort(chars);
         boolean[] used = new boolean[chars.length];
-        backtrack(result, new StringBuilder(), chars, used);
+        StringBuilder current = new StringBuilder();
+        backtrack(chars, used, current, result);
         return result;
     }
-    private void backtrack(List<String> result, StringBuilder temp, char[] chars, boolean[] used) {
-        if (temp.length() == chars.length) {
-            result.add(temp.toString());
+    private void backtrack(char[] chars, boolean[] used, StringBuilder current, ArrayList<String> result) {
+        if (current.length() == chars.length) {
+            result.add(current.toString());
             return;
         }
         for (int i = 0; i < chars.length; i++) {
             if (used[i]) continue;
             if (i > 0 && chars[i] == chars[i - 1] && !used[i - 1]) continue;
             used[i] = true;
-            temp.append(chars[i]);
-            backtrack(result, temp, chars, used);
+            current.append(chars[i]);
+            backtrack(chars, used, current, result);
+            current.deleteCharAt(current.length() - 1);
             used[i] = false;
-            temp.deleteCharAt(temp.length() - 1);
         }
     }
 }
