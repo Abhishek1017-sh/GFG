@@ -1,35 +1,37 @@
 class Solution {
     public boolean isCyclic(int V, int[][] edges) {
         // code here
-        int[] vis=new int[V];
-        int[] pathvis=new int[V];
-        List<List<Integer>> adj=new ArrayList<>();
-        for(int i=0;i<V;i++) adj.add(new ArrayList<>());
-        for(int[] i:edges){
-            adj.get(i[0]).add(i[1]);
-        }
+        ArrayList<ArrayList<Integer>> adj=new ArrayList<>();
         for(int i=0;i<V;i++){
-            if(vis[i]==0){
-                if(dfs(i,adj,vis,pathvis)==true) return true;
+            adj.add(new ArrayList<>());
+        }
+        int[] indeg=new int[V];
+        for(int[] e:edges){
+            adj.get(e[0]).add(e[1]);
+            indeg[e[1]]++;
+            
+        }
+        Queue<Integer> q=new LinkedList<>();
+        for(int i=0;i<V;i++){
+            if(indeg[i]==0){
+                q.add(i);
             }
         }
-        return false;
-    }
-    private boolean dfs(int node,List<List<Integer>> adj,int[] vis,int[] pathvis)
-    {
-        vis[node]=1;
-        pathvis[node]=1;
-        for(int nei:adj.get(node)){
-            if(vis[nei]==0){
-                if(dfs(nei,adj,vis,pathvis)==true){
-                    return true;
+        ArrayList<Integer> topo=new ArrayList<>();
+        int cnt=0;
+        while(!q.isEmpty()){
+            int node=q.peek();
+            q.remove();
+            cnt++;
+            topo.add(node);
+            for(int it:adj.get(node)){
+                indeg[it]--;
+                if(indeg[it]==0){
+                    q.add(it);
                 }
             }
-            else if(pathvis[nei]==1){
-                return true;
-            }
         }
-        pathvis[node]=0;
-        return false;
+        if(cnt==V) return false;
+        return true;
     }
 }
